@@ -4,6 +4,9 @@ import './styles.css';
 import { ReactComponent as IconEddit } from '../../assets/icon-edit.svg';
 import { ReactComponent as IconTrash } from '../../assets/icon-trash.svg';
 import Modal from '../../components/Modal';
+import ModalForm from '../../components/ModalForm';
+import { connect } from 'react-redux';
+import { contactsSlice } from '../../redux/contacts';
 
 const contacts = {
 	id: 2,
@@ -28,6 +31,11 @@ function ContactsDeteils(props) {
 	const onDeleteContact = () => {
 		setShowingDelete(true);
 	};
+
+	// const onSaveContact = (contact) => {
+	// 	const newList = [contact];
+	// 	props.dispatch(contactsSlice.actions.add(newList));
+	// };
 	return (
 		<>
 			<div className="deteils-container">
@@ -62,25 +70,10 @@ function ContactsDeteils(props) {
 			</div>
 			{showingEddit ? (
 				<Modal onClose={onCloseModal}>
-					<div className="deteils-field details-field-head">
-						Eddit contact:
-					</div>
-					<div className="contact-field-wrapper">
-						name:
-						<input type="text" className="contact-input" />
-						number:
-						<input type="text" className="contact-input" />
-						position:
-						<input type="text" className="contact-input" />
-					</div>
-					<div className="contact-button-wrapper">
-						<button className="button-secondary button">
-							Cancel
-						</button>
-						<button className="button-primary button save-btn">
-							Save
-						</button>
-					</div>
+					<ModalForm
+						title={'Eddit contact:'}
+						// onSave={onSaveContact}
+					/>
 				</Modal>
 			) : null}
 			{showingDelete ? (
@@ -92,7 +85,7 @@ function ContactsDeteils(props) {
 						<button className="button-secondary button">
 							Cancel
 						</button>
-						<button className="button-primary button save-btn">
+						<button className="button-primary button delete-btn">
 							Delete
 						</button>
 					</div>
@@ -102,4 +95,16 @@ function ContactsDeteils(props) {
 	);
 }
 
-export default ContactsDeteils;
+const mapStateToProps = (state) => {
+    console.log(state, 'NANA');
+	return {
+		dataList: state.contacts.list,
+	};
+};
+
+const ConnectedContactsDetails = connect(
+	mapStateToProps,
+	null
+)(ContactsDeteils);
+
+export default ConnectedContactsDetails;

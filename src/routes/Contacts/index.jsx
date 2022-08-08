@@ -1,66 +1,102 @@
 import './styles.css';
 import Contact from '../../components/Contact';
+import { useSelector, useDispatch } from 'react-redux';
 import { ReactComponent as AddIcon } from '../../assets/icons-plus.svg';
-import { useState } from 'react';
 import Modal from '../../components/Modal';
 import { Link } from 'react-router-dom';
+import modalSlice from '../../redux/modal';
+import ModalForm from '../../components/ModalForm';
+import { useState } from 'react';
+import { connect } from 'react-redux';
+import { contactsSlice } from '../../redux/contacts';
 
-const contacts = [{ id: 1, name: 'Alex', position: 'developer' }];
+// import { v4 as uuidv4 } from 'uuid';
 
-function Contacts() {
-	const [showing, setShowing] = useState(false);
+function Contacts(props) {
+	console.log(props, 'kkkkkk');
+	const [list, setList] = useState(
+		JSON.parse(localStorage.getItem('list') || '') || []
+	);
+	/*-----------------------------------------------*/
+
+	/*-----------------------------------------------*/
+	const isModalOpen = useSelector((state) => state.modal.isOpen);
+	// const dispatch = useDispatch();
 
 	const showingModal = () => {
-		setShowing(true);
+		props.dispatch(modalSlice.actions.openClose(true));
 	};
+	/*-----------------------------------------------*/
 
 	const onCloseModal = () => {
-		setShowing(false);
+		props.dispatch(modalSlice.actions.openClose(false));
 	};
 
-	const onDeleteContact = () => {};
+	const onDeleteContact = (id) => {
+		console.log(id);
+		const newList = list.filter((contact) => {
+			return String(contact.id) !== id;
+		});
+		console.log(newList);
+		setList(newList);
+		saveToLocalStorage(newList);
+	};
+
+	const onSaveContact = (contact) => {
+		const newList = [...list, contact];
+		setList(newList);
+		props.dispatch(modalSlice.actions.openClose(false));
+		saveToLocalStorage(newList);
+		props.dispatch(contactsSlice.actions.add(contact));
+	};
+
+	const saveToLocalStorage = (list) => {
+		localStorage.setItem('list', JSON.stringify(list));
+	};
 
 	return (
 		<>
 			<div className="contacts-container">
-				{contacts.map((contact) => {
+				<button
+					className="button-primary button "
+					onClick={showingModal}
+				>
+					Add+
+				</button>
+				{list.map((contact) => {
 					return (
-						<Link to={'/' + contact.id} style={{ textDecoration: 'none' }}>
+						<Link
+							to={'/' + contact.id}
+							style={{ textDecoration: 'none', color: 'black' }}
+						>
 							<Contact
 								name={contact.name}
+								id={contact.id}
 								onDelete={onDeleteContact}
 							/>
 						</Link>
 					);
 				})}
-
-				<div className="row-btn" onClick={showingModal}>
-					<AddIcon className="add-icn" />
-				</div>
 			</div>
-			{showing ? (
+			{isModalOpen ? (
 				<Modal onClose={onCloseModal}>
-					<div className="contact-field contact-field-head">
-						Create contact:
-					</div>
-					<div className="contact-field-wrapper">
-						name:
-						<input type="text" className="contact-input" />
-						number:
-						<input type="text" className="contact-input" />
-						position:
-						<input type="text" className="contact-input" />
-					</div>
-					<div className="contact-button-wrapper">
-						<button className="button-secondary button">
-							Cancel
-						</button>
-						<button className="button-primary button save-btn">Save</button>
-					</div>
+					<ModalForm
+						title={'Create contact:'}
+						onSave={onSaveContact}
+					></ModalForm>
 				</Modal>
 			) : null}
 		</>
 	);
 }
 
-export default Contacts;
+const mapStateToProps = (state) => {
+	console.log(state, 'PPPAPAA');
+	return {
+		dataList: state.contacts.list,
+	};
+};
+
+const ConnectedContacts = connect(mapStateToProps, null)(Contacts);
+
+export default ConnectedContacts;
