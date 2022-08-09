@@ -14,9 +14,9 @@ import { contactsSlice } from '../../redux/contacts';
 
 function Contacts(props) {
 	console.log(props, 'kkkkkk');
-	const [list, setList] = useState(
-		JSON.parse(localStorage.getItem('list') || '') || []
-	);
+	// const [list, setList] = useState(
+	// 	JSON.parse(localStorage.getItem('list') || '') || []
+	// );
 	/*-----------------------------------------------*/
 
 	/*-----------------------------------------------*/
@@ -34,25 +34,24 @@ function Contacts(props) {
 
 	const onDeleteContact = (id) => {
 		console.log(id);
-		const newList = list.filter((contact) => {
-			return String(contact.id) !== id;
-		});
-		console.log(newList);
-		setList(newList);
-		saveToLocalStorage(newList);
+		// const newList = list.filter((contact) => {
+		// 	return String(contact.id) !== id;
+		// });
+
+		props.dispatch(contactsSlice.actions.onDelete(id));
+		// saveToLocalStorage(newList);
+		
 	};
 
 	const onSaveContact = (contact) => {
-		const newList = [...list, contact];
-		setList(newList);
 		props.dispatch(modalSlice.actions.openClose(false));
-		saveToLocalStorage(newList);
+		// saveToLocalStorage(newList);
 		props.dispatch(contactsSlice.actions.add(contact));
 	};
 
-	const saveToLocalStorage = (list) => {
-		localStorage.setItem('list', JSON.stringify(list));
-	};
+	// const saveToLocalStorage = (list) => {
+	// 	localStorage.setItem('list', JSON.stringify(list));
+	// };
 
 	return (
 		<>
@@ -63,7 +62,7 @@ function Contacts(props) {
 				>
 					Add+
 				</button>
-				{list.map((contact) => {
+				{props.dataList.map((contact) => {
 					return (
 						<Link
 							to={'/' + contact.id}

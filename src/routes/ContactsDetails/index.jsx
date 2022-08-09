@@ -19,6 +19,13 @@ function ContactsDeteils(props) {
 	const [showingEddit, setShowingEddit] = useState(false);
 	const [showingDelete, setShowingDelete] = useState(false);
 
+	const { id } = useParams();
+
+	const contact = props.dataList.find((el) => {
+		return el.id === id;
+	});
+	console.log(contact);
+
 	const onEdditContact = () => {
 		setShowingEddit(true);
 	};
@@ -40,7 +47,7 @@ function ContactsDeteils(props) {
 		<>
 			<div className="deteils-container">
 				<div className="wrap-fields wrap-head">
-					<div className="description head">{contacts.name}</div>
+					<div className="description head">{contact.name}</div>
 					<IconEddit
 						className="deteils-icon eddit"
 						onClick={onEdditContact}
@@ -53,11 +60,11 @@ function ContactsDeteils(props) {
 				</div>
 				<div className="wrap-fields">
 					<div className="deteils-field">Number:</div>
-					<div className="description">{contacts.number}</div>
+					<div className="description">{contact.number}</div>
 				</div>
 				<div className="wrap-fields">
 					<div className="deteils-field">Position:</div>
-					<div className="description">{contacts.position}</div>
+					<div className="description">{contact.position}</div>
 				</div>
 				<div className="row-icon"></div>
 			</div>
@@ -96,7 +103,7 @@ function ContactsDeteils(props) {
 }
 
 const mapStateToProps = (state) => {
-    console.log(state, 'NANA');
+	console.log(state, 'NANA');
 	return {
 		dataList: state.contacts.list,
 	};

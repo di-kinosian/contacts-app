@@ -7,4 +7,5 @@ export const store = configureStore({
 		modal: modalSlice.reducer,
 		contacts: contactsSlice.reducer,
 	},
+    devTools: true
 });

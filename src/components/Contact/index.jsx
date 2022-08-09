@@ -2,9 +2,10 @@ import './styles.css';
 
 function Contact(props) {
 	const onDelete = (event) => {
-		props.onDelete(event.target.dataset.id);
 		event.preventDefault();
+		props.onDelete(props.id);
 	};
+
 	return (
 		<div className="contact-container">
 			<div className="contact">
@@ -14,7 +15,6 @@ function Contact(props) {
 				<div
 					className="delete-icn"
 					onClick={onDelete}
-					data-id={props.id}
 				>
 					+
 				</div>
