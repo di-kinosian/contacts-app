@@ -3,9 +3,9 @@ import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 function ModalForm(props) {
-	const [name, setName] = useState('');
-	const [position, setPosition] = useState('');
-	const [number, setNumber] = useState('');
+	const [name, setName] = useState(props.contact?.name || '');
+	const [position, setPosition] = useState(props.contact?.position || '');
+	const [number, setNumber] = useState(props.contact?.number || '');
 
 	const onChangeName = (event) => {
 		setName(event.target.value);

@@ -13,12 +13,6 @@ import { contactsSlice } from '../../redux/contacts';
 // import { v4 as uuidv4 } from 'uuid';
 
 function Contacts(props) {
-	console.log(props, 'kkkkkk');
-	// const [list, setList] = useState(
-	// 	JSON.parse(localStorage.getItem('list') || '') || []
-	// );
-	/*-----------------------------------------------*/
-
 	/*-----------------------------------------------*/
 	const isModalOpen = useSelector((state) => state.modal.isOpen);
 	// const dispatch = useDispatch();
@@ -33,25 +27,13 @@ function Contacts(props) {
 	};
 
 	const onDeleteContact = (id) => {
-		console.log(id);
-		// const newList = list.filter((contact) => {
-		// 	return String(contact.id) !== id;
-		// });
-
 		props.dispatch(contactsSlice.actions.onDelete(id));
-		// saveToLocalStorage(newList);
-		
 	};
 
 	const onSaveContact = (contact) => {
 		props.dispatch(modalSlice.actions.openClose(false));
-		// saveToLocalStorage(newList);
 		props.dispatch(contactsSlice.actions.add(contact));
 	};
-
-	// const saveToLocalStorage = (list) => {
-	// 	localStorage.setItem('list', JSON.stringify(list));
-	// };
 
 	return (
 		<>
@@ -65,6 +47,7 @@ function Contacts(props) {
 				{props.dataList.map((contact) => {
 					return (
 						<Link
+							key={contact.id}
 							to={'/' + contact.id}
 							style={{ textDecoration: 'none', color: 'black' }}
 						>
@@ -90,7 +73,7 @@ function Contacts(props) {
 }
 
 const mapStateToProps = (state) => {
-	console.log(state, 'PPPAPAA');
+	// console.log(state, 'PPPAPAA');
 	return {
 		dataList: state.contacts.list,
 	};

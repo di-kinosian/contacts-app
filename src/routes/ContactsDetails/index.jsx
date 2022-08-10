@@ -20,6 +20,7 @@ function ContactsDeteils(props) {
 	const [showingDelete, setShowingDelete] = useState(false);
 
 	const { id } = useParams();
+	console.log(id);
 
 	const contact = props.dataList.find((el) => {
 		return el.id === id;
@@ -39,10 +40,16 @@ function ContactsDeteils(props) {
 		setShowingDelete(true);
 	};
 
-	// const onSaveContact = (contact) => {
-	// 	const newList = [contact];
-	// 	props.dispatch(contactsSlice.actions.add(newList));
-	// };
+	const onSaveContact = (el) => {
+		props.dispatch(
+			contactsSlice.actions.onEdit({
+				id: id,
+				name: el.name,
+				position: el.position,
+				number: el.number,
+			})
+		);
+	};
 	return (
 		<>
 			<div className="deteils-container">
@@ -79,7 +86,8 @@ function ContactsDeteils(props) {
 				<Modal onClose={onCloseModal}>
 					<ModalForm
 						title={'Eddit contact:'}
-						// onSave={onSaveContact}
+						onSave={onSaveContact}
+						contact={contact}
 					/>
 				</Modal>
 			) : null}
